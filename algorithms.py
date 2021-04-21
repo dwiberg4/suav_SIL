@@ -40,7 +40,6 @@ class Algorithms:
             pass
 
             # TODO Algorithm 3 goes here
-            # flag, r, q, p, chi, chi_inf, k_path, c, rho, lamb, k_orbit
             chi_q = float(m.atan2(q[1],q[0]))
             e_p_i = p - r
             k = np.array([[0],[0],[1]])
@@ -63,9 +62,18 @@ class Algorithms:
             pass
 
             # TODO Algorithm 4 goes here
-            e_crosstrack = 0
-            chi_c = 0
-            h_c = 0
+            # flag, r, q, p, chi, chi_inf, k_path, c, rho, lamb, k_orbit
+            h_c = -(c[2])
+            d = float(np.sqrt( ((p[0] - c[0])**2) + ((p[1] - c[1])**2) ))
+            phi = m.atan2( (p[1] - c[1]) , (p[0] - c[0]) )
+
+            if (phi - chi < -np.pi):
+                phi = (phi + (2*np.pi))
+            if (phi - chi > np.pi):
+                phi = (phi - (2*np.pi))
+            
+            e_crosstrack = d - rho
+            chi_c = phi + (lamb * ( (np.pi/2) + (np.arctan(k_orbit * ((d - rho) / rho) )) ))
 
         else:
             raise Exception("Invalid path type")

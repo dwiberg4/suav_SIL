@@ -65,7 +65,7 @@ class path_follower_test(unittest.TestCase):
         k_orbit = 3
         example = Algorithms.Algorithms()
         cross, chi_c, h_c = example.pathFollower(flag,r,q,p,chi,chi_inf,k_path,c,rho,lamb,k_orbit)
-        self.assertAlmostEqual(cross,-800,3,''.join("Crosstrack error should be -800 but it is: "+str(cross)))
+        self.assertAlmostEqual(cross,800,3,''.join("Crosstrack error should be -800 but it is: "+str(cross)))
 
     def test_orbitCommandChi(self):
         flag = 2
