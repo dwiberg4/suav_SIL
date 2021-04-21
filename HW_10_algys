@@ -1,0 +1,60 @@
+function [e_crosstrack, chi_c, h_c] = fcn(state,path)
+%% Create the path structure
+path_struct = pathvec2pathstruct(path);
+p = [state(1),state(2),state(3)];
+chi = calc_chi(state);
+
+if strcmp(path_struct.type,'lin')
+    % Implement the straight line path follower
+    % Unpack the vectors:
+    r = path_struct.origin;
+    q = path_struct.direction;
+   
+    % Perform preliminary calculations:
+    chi_q = atan2(q(2),q(1));
+    e_p_i = p - r';
+    n = (cross(q,[0,0,1])) / (norm(cross(q,[0,0,1])));
+    s_i = e_p_i - ((dot(e_p_i,n))*n);
+    if ((chi_q - chi) < -pi)
+        chi_q = chi_q + (2*pi);
+    end
+    if ((chi_q - chi) > pi)
+        chi_q = chi_q - (2*pi);
+    end
+   
+    % Perform final/ output calculations:
+    e_crosstrack = -sin(chi_q)*(p(1)-r(1)) + cos(chi_q)*(p(2)-r(2));
+    chi_c = chi_q - ( path_struct.chi_inf * (2/pi) * ...
+        atan(path_struct.k_path * e_crosstrack) ) ;
+    h_c = -r(3) - ( (sqrt((s_i(1)^2 + s_i(2)^2))) * ...
+        (q(3) / (sqrt((q(1)^2 + q(2)^2))) ) );
+   
+elseif strcmp(path_struct.type,'orb')
+    % Implement the orbit path follower
+    % Unpack variables:
+    c = path_struct.center;
+    rho = path_struct.radius;
+    lambda = path_struct.orbit_direction;
+   
+    % Perform preliminary calculations:
+    d = sqrt( ((p(1) - c(1))^2) + ((p(2) - c(2))^2) );
+    phi = atan2( (p(2) - c(2)) , (p(1) - c(1)) );
+    if ((phi - chi) < -pi)
+        phi = phi + (2*pi);
+    end
+    if ((phi - chi) > pi)
+        phi = phi - (2*pi);
+    end
+   
+    % Perform final/ output calculations:
+    e_crosstrack = (d-rho);
+    %e_crosstrack = norm(p - c');
+    chi_c = phi + (lambda * ...
+        ( (pi/2) + (atan(path_struct.k_orbit * ((d - rho) / rho) )) ));
+    h_c = -c(3);
+   
+else
+    e_crosstrack = nan;
+    chi_c = calc_chi(state);
+    h_c = -state(3);
+end

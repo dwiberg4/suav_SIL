@@ -1,6 +1,7 @@
 import numpy as np
 from mat import mat
 from utils import in_half_plane, s_norm, Rz, angle, i2p
+import math as m
 
 
 class Algorithms:
@@ -39,11 +40,32 @@ class Algorithms:
             pass
 
             # TODO Algorithm 3 goes here
+            # flag, r, q, p, chi, chi_inf, k_path, c, rho, lamb, k_orbit
+            chi_q = float(m.atan2(q[1],q[0]))
+            e_p_i = p - r
+            k = np.array([[0],[0],[1]])
+            n_cross = np.cross(q,k,axis=0)
+            n = n_cross / (np.linalg.norm(n_cross))
+            s_i = e_p_i - ((np.dot(e_p_i.T,n)) * (n))
+
+            qs = float(q[2] / np.sqrt((q[0]**2) + (q[1]**2)))
+            h_c = float((-r[2]) - (np.sqrt((s_i[0]**2) + (s_i[1]**2)) * qs))
+
+            if (chi_q - chi < -np.pi):
+                chi_q = (chi_q + (2*np.pi))
+            if (chi_q - chi > np.pi):
+                chi_q = (chi_q - (2*np.pi))
+
+            e_crosstrack = float((-np.sin(chi_q)*(p[0]-r[0]))  + (np.cos(chi_q)*(p[1]-r[1])))
+            chi_c = chi_q - ( chi_inf * (2/np.pi) * np.arctan(k_path * e_crosstrack) )
 
         elif flag == 2:  # orbit following
             pass
 
             # TODO Algorithm 4 goes here
+            e_crosstrack = 0
+            chi_c = 0
+            h_c = 0
 
         else:
             raise Exception("Invalid path type")
