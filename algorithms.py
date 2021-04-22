@@ -38,7 +38,14 @@ class Algorithms:
 
         if flag == 1:  # straight line
             pass
-
+            print(r)
+            print(r.shape)
+            print(q)
+            print(q.shape)
+            print(p)
+            print(p.shape)
+            print(c)
+            print(c.shape)
             # TODO Algorithm 3 goes here
             chi_q = float(m.atan2(q[1],q[0]))
             e_p_i = p - r
