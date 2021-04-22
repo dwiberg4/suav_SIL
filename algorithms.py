@@ -38,21 +38,21 @@ class Algorithms:
 
         if flag == 1:  # straight line
             pass
-            print(r)
-            print(r.shape)
-            print(q)
-            print(q.shape)
-            print(p)
-            print(p.shape)
-            print(c)
-            print(c.shape)
+            # print(r)
+            # print(r.shape)
+            # print(q)
+            # print(q.shape)
+            # print(p)
+            # print(p.shape)
+            # print(c)
+            # print(c.shape)
             # TODO Algorithm 3 goes here
             chi_q = float(m.atan2(q[1],q[0]))
             e_p_i = p - r
             k = np.array([[0],[0],[1]])
             n_cross = np.cross(q,k,axis=0)
             n = n_cross / (np.linalg.norm(n_cross))
-            s_i = e_p_i - ((np.dot(e_p_i.T,n)) * (n))
+            s_i = e_p_i - (float(np.dot(e_p_i.T,n)) * (n))
 
             qs = float(q[2] / np.sqrt((q[0]**2) + (q[1]**2)))
             h_c = float((-r[2]) - (np.sqrt((s_i[0]**2) + (s_i[1]**2)) * qs))
