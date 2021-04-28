@@ -449,6 +449,102 @@ class Algorithms:
 
         # TODO Algorithm 8 goes here
 
+        try:
+            i
+        except NameError
+            print("THIS VAR IS NOT YET DEFINED!")
+            i = 0
+        else:
+            print("YEUP, IT'S ALREADY DEFINED")
+        try:
+            state 
+        except NameError
+            print("STATE: THIS VAR IS NOT YET DEFINED!")
+            state = 0
+        else:
+            print("STATE: YEP, ALREADY BEUNO.")
+        
+        if newpath:
+            i = 1   # This value has been decreased from 2 for MATLAB->Python indexing
+            state = 1   # This value has been kept the same
+            (m,N) = W.shape
+            assert (N >= 3), "Not enough vehicle configurations."
+            assert (m == 3)
+        else:
+            (m,N) = w.shape
+            assert (N >= 3), "Not enough vehicle configurations."
+            assert (m == 3)
+        # Determine the Dubins path parameters
+        ps = W[:,i-1]
+        chis = Chi[i-1]
+        pe = W[:,i]
+        chie = Chi[i]
+        dp = findDubinsParameters( ps, chis, pe, chie, R )
+        # L = dp.L
+        c_s = dp.c_s
+        lamb_s = dp.lamb_s
+        c_e = dp.c_e
+        lamb_e = dp.lamb_e
+        z_1 = dp.z_1
+        q_1 = dp.q_1
+        z_2 = dp.z_2
+        z_3 = dp.z_3
+        q_3 = dp.q_3
+        if (state == 1):
+            #Follow start orbit until on the correct side of H1
+            flag = 2
+            c = c_s
+            rho = R
+            lamb = lamb_s
+            if in_half_plane(p,z_1,-q_1):
+                state = 2
+            r = p
+            q = np.array([[1, 0, 0]]).T
+        elif (state == 2):
+            #Continue following the start orbit until in H1
+            if in_half_plane(p,z_1,q_1):
+                state = 3
+            flag = 2
+            r = p
+            q = np.array([[1, 0, 0]]).T
+            c = c_s
+            rho = R
+            lamb = lamb_s
+        elif (state == 3):
+            #Transition to straight-line path until in H2
+            flag = 1
+            r = z_1
+            q = q_1
+            if in_half_plane(p,z_2,q_1):
+                state = 4
+            c = np.zeros((3,1))
+            rho = 0
+            lamb = 0
+        elif (state == 4):
+            #Follow the end orbit until on the correct side of H3
+            flag = 2
+            c = c_e
+            rho = R
+            lamb = lamb_e
+            if in_half_plane(p,z_3,-q_3):
+                state = 5
+            r = p
+            q = np.array([[1, 0, 0]]).T
+        else: #state == 5
+            #Continue following the end orbit until in H3
+            flag = 2
+            r = p
+            q = np.array([[1, 0, 0]]).T
+            c = c_e
+            rho = R
+            lamb = lamb_e
+            if in_half_plane(p,z_3,q_3):
+                state = 1
+                if (i < N):
+                    i = (i+1)
+                else:
+                    break
+
         return flag, r, q, c, rho, lamb, self.i, dp
 
 
