@@ -6,6 +6,7 @@ import math as m
 
 class Algorithms:
     def __init__(self):
+        print("WE HAVE INITIALIZED THE ALGY CLASS!!")
         self.i = 0
         self.state = 0
 
@@ -451,14 +452,14 @@ class Algorithms:
 
         try:
             i
-        except NameError
+        except NameError:
             print("THIS VAR IS NOT YET DEFINED!")
             i = 0
         else:
             print("YEUP, IT'S ALREADY DEFINED")
         try:
             state 
-        except NameError
+        except NameError:
             print("STATE: THIS VAR IS NOT YET DEFINED!")
             state = 0
         else:
@@ -542,8 +543,6 @@ class Algorithms:
                 state = 1
                 if (i < N):
                     i = (i+1)
-                else:
-                    break
 
         return flag, r, q, c, rho, lamb, self.i, dp
 
