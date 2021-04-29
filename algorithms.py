@@ -271,9 +271,10 @@ class Algorithms:
         print(np.cos(float(chi_s)))
         print(np.sin(float(chi_s)))
         print(type(np.cos(float(chi_s))))
-        print(type(np.cos(float(chi_s))))
+        print(type(np.sin(float(chi_s))))
         print(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T)
-        print(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T)
+        print(type(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T))
+        
 
         c_rs = p_s + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
         c_ls = p_s + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
