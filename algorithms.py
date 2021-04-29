@@ -460,7 +460,7 @@ class Algorithms:
         """
 
         # TODO Algorithm 8 goes here
-
+        
         try:
             self.i
         except NameError:
