@@ -336,7 +336,7 @@ class Algorithms:
         L4 = (np.linalg.norm(c_ls - c_le)) + (R*ca) + (R*ef)
 
         # Define the parameters for the minimum length path (i.e. Dubins path)
-        (L,i_min) = self.min_i([L1,L2,L3,L4])
+        (L,i_min) = self.min_i([L1, L2, L3, L4])
         #[L,i_min] = min([L1, L2, L3, L4])
         if (i_min == 0):
             c_s = c_rs
@@ -462,24 +462,25 @@ class Algorithms:
         # TODO Algorithm 8 goes here
 
         try:
-            i
+            self.i
         except NameError:
             print("THIS VAR IS NOT YET DEFINED!")
-            i = 0
+            self.i = 0
         else:
             print("YEUP, IT'S ALREADY DEFINED")
         try:
-            state 
+            self.state 
         except NameError:
             print("STATE: THIS VAR IS NOT YET DEFINED!")
-            state = 0
+            self.state = 0
         else:
             print("STATE: YEP, ALREADY BEUNO.")
         
+        print("\nNEWPATH IS: ",newpath)
         if newpath:
             print("\nARE we GETting in here???")
-            i = 1   # This value has been decreased from 2 for MATLAB->Python indexing
-            state = 1   # This value has been kept the same
+            self.i = 1   # This value has been decreased from 2 for MATLAB->Python indexing
+            self.state = 1   # This value has been kept the same
             (m,N) = W.shape
             assert (N >= 3), "Not enough vehicle configurations."
             assert (m == 3)
@@ -489,10 +490,10 @@ class Algorithms:
             assert (N >= 3), "Not enough vehicle configurations."
             assert (m == 3)
         # Determine the Dubins path parameters
-        ps = W[:,i-1]
-        chis = Chi[i-1]
-        pe = W[:,i]
-        chie = Chi[i]
+        ps = W[:,self.i-1]
+        chis = Chi[self.i-1]
+        pe = W[:,self.i]
+        chie = Chi[self.i]
         dp = self.findDubinsParameters( ps, chis, pe, chie, R )
         # L = dp.L
         c_s = dp.c_s
@@ -504,7 +505,7 @@ class Algorithms:
         z_2 = dp.z_2
         z_3 = dp.z_3
         q_3 = dp.q_3
-        if (state == 1):
+        if (self.state == 1):
             #Follow start orbit until on the correct side of H1
             print("\nSTATE: 1; Follow start orbit until on the correct side of H1")
             flag = 2
@@ -512,32 +513,32 @@ class Algorithms:
             rho = R
             lamb = lamb_s
             if in_half_plane(p,z_1,-q_1):
-                state = 2
+                self.state = 2
             r = p
             q = np.array([[1, 0, 0]]).T
-        elif (state == 2):
+        elif (self.state == 2):
             #Continue following the start orbit until in H1
             print("\nSTATE: 2; Continue following the start orbit until in H1")
             if in_half_plane(p,z_1,q_1):
-                state = 3
+                self.state = 3
             flag = 2
             r = p
             q = np.array([[1, 0, 0]]).T
             c = c_s
             rho = R
             lamb = lamb_s
-        elif (state == 3):
+        elif (self.state == 3):
             #Transition to straight-line path until in H2
             print("\nSTATE: 3; Transition to straight-line path until in H2")
             flag = 1
             r = z_1
             q = q_1
             if in_half_plane(p,z_2,q_1):
-                state = 4
+                self.state = 4
             c = np.zeros((3,1))
             rho = 0
             lamb = 0
-        elif (state == 4):
+        elif (self.state == 4):
             #Follow the end orbit until on the correct side of H3
             print("\nSTATE: 4; Follow the end orbit until on the correct side of H3")
             flag = 2
@@ -545,7 +546,7 @@ class Algorithms:
             rho = R
             lamb = lamb_e
             if in_half_plane(p,z_3,-q_3):
-                state = 5
+                self.state = 5
             r = p
             q = np.array([[1, 0, 0]]).T
         else: #state == 5
@@ -558,9 +559,9 @@ class Algorithms:
             rho = R
             lamb = lamb_e
             if in_half_plane(p,z_3,q_3):
-                state = 1
-                if (i < N):
-                    i = (i+1)
+                self.state = 1
+                if (self.i < N):
+                    self.i = (self.i+1)
 
         return flag, r, q, c, rho, lamb, self.i, dp
 
