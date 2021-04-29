@@ -275,14 +275,14 @@ class Algorithms:
         print(np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T)
         print(np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T)
 
-        c_rs = p_s + ( np.matmul((R * Rzm(np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
-        c_ls = p_s + ( np.matmul((R * Rzm(-np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
-        c_re = p_e + ( np.matmul((R * Rzm(np.pi/2)), np.array([[np.cos(chi_e),np.sin(chi_e),0]]).T) )
-        c_le = p_e + ( np.matmul((R * Rzm(-np.pi/2)), np.array([[np.cos(chi_e),np.sin(chi_e),0]]).T) )
+        c_rs = p_s + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
+        c_ls = p_s + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
+        c_re = p_e + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(chi_e),np.sin(chi_e),0]]).T) )
+        c_le = p_e + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(chi_e),np.sin(chi_e),0]]).T) )
 
         # Compute path lengths
         # Case 1: R-S-R
-        th = anglem(c_re - c_rs)
+        th = self.anglem(c_re - c_rs)
         ah = np.mod((th-(np.pi/2)),(2*np.pi))
         ba = np.mod((chi_s-(np.pi/2)),(2*np.pi))
         ca = np.mod(((2*np.pi)+ ah- ba),(2*np.pi))
@@ -292,7 +292,7 @@ class Algorithms:
         L1 = (np.linalg.norm(c_rs - c_re)) + (R*ca) + (R*ef)
 
         # Case 2: R-S-L
-        th = anglem(c_le - c_rs)
+        th = self.anglem(c_le - c_rs)
         ell = np.linalg.norm(c_le - c_rs)
         th2 = th - (np.pi/2) + m.asin((2*R)/ell)
         ah = np.mod(th2,(2*np.pi))
@@ -308,7 +308,7 @@ class Algorithms:
             L2 = ja + (R*ca) + (R*ef)
 
         # Case 3: L-S-R
-        th = anglem(c_re - c_ls)
+        th = self.anglem(c_re - c_ls)
         ell = np.linalg.norm(c_re - c_ls)
         th2 = m.acos((2*R)/ell)
         ah = np.mod((chi_s+(np.pi/2)),(2*np.pi))
@@ -324,7 +324,7 @@ class Algorithms:
             L3 = ja + (R*ca) + (R*ef)
 
         # Case 4: L-S-L
-        th = anglem(c_le - c_ls)
+        th = self.anglem(c_le - c_ls)
         ah = np.mod((chi_s+(np.pi/2)),(2*np.pi))
         ba = np.mod((th+(np.pi/2)),(2*np.pi))
         ca = np.mod(((2*np.pi)+ ah- ba),(2*np.pi))
@@ -334,7 +334,7 @@ class Algorithms:
         L4 = (np.linalg.norm(c_ls - c_le)) + (R*ca) + (R*ef)
 
         # Define the parameters for the minimum length path (i.e. Dubins path)
-        (L,i_min) = min_i([L1,L2,L3,L4])
+        (L,i_min) = self.min_i([L1,L2,L3,L4])
         #[L,i_min] = min([L1, L2, L3, L4])
         if (i_min == 0):
             c_s = c_rs
@@ -342,8 +342,8 @@ class Algorithms:
             c_e = c_re
             lamb_e = 1
             q_1 = (c_e - c_s) / (np.linalg.norm(c_e - c_s))
-            z_1 = c_s + (np.matmul( (R * Rzm(-np.pi/2)), q_1))
-            z_2 = c_e + (np.matmul( (R * Rzm(-np.pi/2)), q_1))
+            z_1 = c_s + (np.matmul( (R * self.Rzm(-np.pi/2)), q_1))
+            z_2 = c_e + (np.matmul( (R * self.Rzm(-np.pi/2)), q_1))
             ell = np.linalg.norm(c_s - c_e)
         elif (i_min == 1):
             c_s = c_rs
@@ -351,34 +351,34 @@ class Algorithms:
             c_e = c_le
             lamb_e = -1
             ell = np.linalg.norm(c_e - c_s)
-            th = anglem(c_e - c_s)
+            th = self.anglem(c_e - c_s)
             th2 = th - (np.pi/2) + m.asin((2*R)/ell)
-            q_1 = np.matmul( (Rzm(th2+(np.pi/2))), e_1)
-            z_1 = c_s + (np.matmul( (R * Rzm(th2)), e_1) )
-            z_2 = c_e + (np.matmul( (R * Rzm(th2+np.pi)), e_1) )
+            q_1 = np.matmul( (self.Rzm(th2+(np.pi/2))), e_1)
+            z_1 = c_s + (np.matmul( (R * self.Rzm(th2)), e_1) )
+            z_2 = c_e + (np.matmul( (R * self.Rzm(th2+np.pi)), e_1) )
         elif (i_min == 2):
             c_s = c_ls
             lamb_s = -1
             c_e = c_re
             lamb_e = 1
             ell = np.linalg.norm(c_e - c_s)
-            th = anglem(c_e - c_s)
+            th = self.anglem(c_e - c_s)
             th2 = m.acos((2*R)/ell)
-            q_1 = np.matmul( (Rzm(th+th2-(np.pi/2))), e_1)
-            z_1 = c_s + (np.matmul( (R * Rzm(th+th2)), e_1) )
-            z_2 = c_e + (np.matmul( (R * Rzm(th+th2-np.pi)), e_1) )
+            q_1 = np.matmul( (self.Rzm(th+th2-(np.pi/2))), e_1)
+            z_1 = c_s + (np.matmul( (R * self.Rzm(th+th2)), e_1) )
+            z_2 = c_e + (np.matmul( (R * self.Rzm(th+th2-np.pi)), e_1) )
         else: # i_min == 3
             c_s = c_ls
             lamb_s = -1
             c_e = c_le
             lamb_e = -1
             q_1 = (c_e - c_s) / (np.linalg.norm(c_e - c_s))
-            z_1 = c_s + (np.matmul( (R * Rzm(np.pi/2)), q_1) )
-            z_2 = c_e + (np.matmul( (R * Rzm(np.pi/2)), q_1) )
+            z_1 = c_s + (np.matmul( (R * self.Rzm(np.pi/2)), q_1) )
+            z_2 = c_e + (np.matmul( (R * self.Rzm(np.pi/2)), q_1) )
             ell = np.linalg.norm(c_s - c_e)
 
         z_3 = p_e
-        q_3 = np.matmul( (Rzm(chi_e)), e_1)
+        q_3 = np.matmul( (self.Rzm(chi_e)), e_1)
 
         # package output into DubinsParameters class
         dp = DubinsParameters()
