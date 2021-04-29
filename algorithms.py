@@ -480,7 +480,7 @@ class Algorithms:
         chis = Chi[i-1]
         pe = W[:,i]
         chie = Chi[i]
-        dp = findDubinsParameters(self, ps, chis, pe, chie, R )
+        dp = self.findDubinsParameters( ps, chis, pe, chie, R )
         # L = dp.L
         c_s = dp.c_s
         lamb_s = dp.lamb_s
