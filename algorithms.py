@@ -406,7 +406,7 @@ class Algorithms:
 
         return dp
 
-    def min_i(Ls):
+    def min_i(self,Ls):
         i = 0
         val = Ls[0]
         for j in range(len(Ls)):
@@ -416,7 +416,7 @@ class Algorithms:
         return (val,i)
 
 
-    def Rzm(th):
+    def Rzm(self,th):
         out = np.array([\
             [np.cos(th), -np.sin(th), 0],\
             [np.sin(th), np.cos(th), 0],\
@@ -424,7 +424,7 @@ class Algorithms:
         return out
     
 
-    def anglem(v):
+    def anglem(self,v):
         out = m.atan2(v[1],v[0])
         return out
     
