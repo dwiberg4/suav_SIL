@@ -266,14 +266,14 @@ class Algorithms:
         # Misc calcs
         e_1 = np.array([[1,0,0]]).T
         # Compute circle centers
-        print(chi_s)
-        print(type(chi_s))
-        print(np.cos(chi_s))
-        print(np.sin(chi_s))
-        print(type(np.cos(chi_s)))
-        print(type(np.cos(chi_s)))
-        print(np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T)
-        print(np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T)
+        print(float(chi_s))
+        print(type(float(chi_s)))
+        print(np.cos(float(chi_s)))
+        print(np.sin(float(chi_s)))
+        print(type(np.cos(float(chi_s))))
+        print(type(np.cos(float(chi_s))))
+        print(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T)
+        print(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T)
 
         c_rs = p_s + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
         c_ls = p_s + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
