@@ -266,20 +266,21 @@ class Algorithms:
         # Misc calcs
         e_1 = np.array([[1,0,0]]).T
         # Compute circle centers
-        print(float(chi_s))
-        print(type(float(chi_s)))
-        print(np.cos(float(chi_s)))
-        print(np.sin(float(chi_s)))
-        print(type(np.cos(float(chi_s))))
-        print(type(np.sin(float(chi_s))))
-        print(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T)
-        print(type(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T))
-        
 
-        c_rs = p_s + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
-        c_ls = p_s + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(chi_s),np.sin(chi_s),0]]).T) )
-        c_re = p_e + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(chi_e),np.sin(chi_e),0]]).T) )
-        c_le = p_e + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(chi_e),np.sin(chi_e),0]]).T) )
+        # print(float(chi_s))
+        # print(type(float(chi_s)))
+        # print(np.cos(float(chi_s)))
+        # print(np.sin(float(chi_s)))
+        # print(type(np.cos(float(chi_s))))
+        # print(type(np.sin(float(chi_s))))
+        # print(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T)
+        # print(type(np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T))
+
+
+        c_rs = p_s + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T) )
+        c_ls = p_s + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(float(chi_s)),np.sin(float(chi_s)),0]]).T) )
+        c_re = p_e + ( np.matmul((R * self.Rzm(np.pi/2)), np.array([[np.cos(float(chi_e)),np.sin(float(chi_e)),0]]).T) )
+        c_le = p_e + ( np.matmul((R * self.Rzm(-np.pi/2)), np.array([[np.cos(float(chi_e)),np.sin(float(chi_e)),0]]).T) )
 
         # Compute path lengths
         # Case 1: R-S-R
@@ -379,7 +380,7 @@ class Algorithms:
             ell = np.linalg.norm(c_s - c_e)
 
         z_3 = p_e
-        q_3 = np.matmul( (self.Rzm(chi_e)), e_1)
+        q_3 = np.matmul( (self.Rzm(float(chi_e))), e_1)
 
         # package output into DubinsParameters class
         dp = DubinsParameters()
@@ -476,13 +477,15 @@ class Algorithms:
             print("STATE: YEP, ALREADY BEUNO.")
         
         if newpath:
+            print("\nARE we GETting in here???")
             i = 1   # This value has been decreased from 2 for MATLAB->Python indexing
             state = 1   # This value has been kept the same
             (m,N) = W.shape
             assert (N >= 3), "Not enough vehicle configurations."
             assert (m == 3)
         else:
-            (m,N) = w.shape
+            print("\nARe we getting into this else statement?")
+            (m,N) = W.shape
             assert (N >= 3), "Not enough vehicle configurations."
             assert (m == 3)
         # Determine the Dubins path parameters
@@ -503,6 +506,7 @@ class Algorithms:
         q_3 = dp.q_3
         if (state == 1):
             #Follow start orbit until on the correct side of H1
+            print("\nSTATE: 1; Follow start orbit until on the correct side of H1")
             flag = 2
             c = c_s
             rho = R
@@ -513,6 +517,7 @@ class Algorithms:
             q = np.array([[1, 0, 0]]).T
         elif (state == 2):
             #Continue following the start orbit until in H1
+            print("\nSTATE: 2; Continue following the start orbit until in H1")
             if in_half_plane(p,z_1,q_1):
                 state = 3
             flag = 2
@@ -523,6 +528,7 @@ class Algorithms:
             lamb = lamb_s
         elif (state == 3):
             #Transition to straight-line path until in H2
+            print("\nSTATE: 3; Transition to straight-line path until in H2")
             flag = 1
             r = z_1
             q = q_1
@@ -533,6 +539,7 @@ class Algorithms:
             lamb = 0
         elif (state == 4):
             #Follow the end orbit until on the correct side of H3
+            print("\nSTATE: 4; Follow the end orbit until on the correct side of H3")
             flag = 2
             c = c_e
             rho = R
@@ -543,6 +550,7 @@ class Algorithms:
             q = np.array([[1, 0, 0]]).T
         else: #state == 5
             #Continue following the end orbit until in H3
+            print("\nSTATE: 5; Continue following the end orbit until in H3")
             flag = 2
             r = p
             q = np.array([[1, 0, 0]]).T
